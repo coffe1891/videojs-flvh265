@@ -1,16 +1,16 @@
-# videojs-flv-h265
+# videojs-flvh265
 
 videojs&#39; Tech for flv+h265
 
 ## Installation
 
 ```sh
-npm install --save videojs-flv-h265
+npm install --save videojs-flvh265
 ```
 
 ## Usage
 
-To include videojs-flv-h265 on your website or web application, use any of the following methods.
+To include videojs-flvh265 on your website or web application, use any of the following methods.
 
 ### `<script>` Tag
 
@@ -18,7 +18,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ```html
 <script src="//path/to/video.min.js"></script>
-<script src="//path/to/videojs-flv-h265.min.js"></script>
+<script src="//path/to/videojs-flvh265.min.js"></script>
 <script>
   var player = videojs('my-video');
 
@@ -28,7 +28,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
 
 ### Browserify/CommonJS
 
-When using with Browserify, install videojs-flv-h265 via npm and `require` the plugin as you would any other module.
+When using with Browserify, install videojs-flvh265 via npm and `require` the plugin as you would any other module.
 
 ```js
 var videojs = require('video.js');
@@ -36,7 +36,7 @@ var videojs = require('video.js');
 // The actual plugin function is exported by this module, but it is also
 // attached to the `Player.prototype`; so, there is no need to assign it
 // to a variable.
-require('videojs-flv-h265');
+require('videojs-flvh265');
 
 var player = videojs('my-video');
 
@@ -48,7 +48,7 @@ player.flvH265();
 When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
 
 ```js
-require(['video.js', 'videojs-flv-h265'], function(videojs) {
+require(['video.js', 'videojs-flvh265'], function(videojs) {
   var player = videojs('my-video');
 
   player.flvH265();

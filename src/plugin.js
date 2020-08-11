@@ -1,5 +1,7 @@
 import videojs from '../node_modules/video.js/dist/video.js';
-import { version as VERSION } from '../package.json';
+import {
+  version as VERSION
+} from '../package.json';
 import WXInlinePlayer from 'wx-inline-player-new';
 import window from 'global/window';
 
@@ -24,6 +26,8 @@ class FlvH265 extends Tech {
 
     let self = this;
 
+    self.debug = true;
+
     // Merge default parames with ones passed in
     const params = mergeOptions({
       asmUrl: './node_modules/wx-inline-player-new/lib/prod.h265.asm.combine.js',
@@ -45,10 +49,9 @@ class FlvH265 extends Tech {
     }, options.params);
 
     WXInlinePlayer.ready(params).then(player => {
+      self.triggerReady();
       self.player = player;
-      player.play();
       self.initEvent_(params);
-      // self.triggerReady();
     });
   }
 
@@ -65,20 +68,25 @@ class FlvH265 extends Tech {
     // Generate ID for canvas object
     const objId = options.techId;
 
-    self.el_ = FlvH265.embed(objId);    
-    
+    self.el_ = FlvH265.embed(objId);
+
     self.el_.tech = self;
 
     return self.el_;
   }
 
-  initEvent_(params){
+  initEvent_(params) {
     let self = this;
-    let $canvas = params.$container;
+    let $canvas = self.$canvas = params.$container;
     let videoHeight = self.el_.parentElement.offsetHeight;
     let videoWidth = self.el_.parentElement.offsetWidth;
-    this.player.on('mediaInfo', mediaInfo => {
-      const { onMetaData } = mediaInfo;
+    //set the canvas' height and width
+    self.player.on('mediaInfo', mediaInfo => {
+      self.log()(`mediaInfo`, mediaInfo, videoHeight, videoWidth);
+      const {
+        onMetaData
+      } = mediaInfo;
+      //1.下面这里指定高宽，其实是解码器绘制的真实的高宽
       $canvas.height = onMetaData.height || videoHeight;
       $canvas.width = onMetaData.width || videoWidth;
       for (let i = 0; i < onMetaData.length; i++) {
@@ -88,6 +96,10 @@ class FlvH265 extends Tech {
           $canvas.width = onMetaData[i].width;
         }
       }
+      //2.这里指定高宽，是拉伸canvas以便填满指定高宽的矩形
+      $canvas.style.height = '100%';//videoHeight + `px`;
+      $canvas.style.width = '100%';//videoWidth + `px`;
+      self.log()(`mediaInfo`, $canvas.height, $canvas.width);
     });
   }
 
@@ -95,9 +107,6 @@ class FlvH265 extends Tech {
    * Called by {@link Player#play} to play using the `FlvH265` Tech.
    */
   play() {
-    // if (this.ended()) {
-    //   this.setCurrentTime(0);
-    // }
     this.player.play();
   }
 
@@ -108,6 +117,10 @@ class FlvH265 extends Tech {
     this.player.pause();
   }
 
+  paused() {
+    return this.player.state == 'paused';
+  }
+
   /**
    * Get the current playback time in seconds
    *
@@ -115,12 +128,7 @@ class FlvH265 extends Tech {
    *         The current time of playback in seconds.
    */
   currentTime() {
-    // when seeking make the reported time keep up with the requested time
-    // by reading the time we're seeking to
-    if (this.seeking()) {
-      return this.lastSeekTarget_ || 0;
-    }
-    return this.el_.vjs_getProperty('currentTime');
+    return this.player.getCurrentTime();
   }
 
   /**
@@ -130,12 +138,7 @@ class FlvH265 extends Tech {
    8          The total duration of the current media.
    */
   duration() {
-    if (this.readyState() === 0) {
-      return NaN;
-    }
-    const duration = this.el_.vjs_getProperty('duration');
-
-    return duration >= 0 ? duration : Infinity;
+    return this.player.getAvaiableDuration();
   }
 
   /**
@@ -145,26 +148,42 @@ class FlvH265 extends Tech {
    *         The time range object that was created.
    */
   buffered() {
-    const ranges = this.el_.vjs_getProperty('buffered');
-
-    if (ranges.length === 0) {
-      return createTimeRange();
-    }
-    debugger
-    return createTimeRange(ranges[0][0], ranges[0][1]);
+    return createTimeRange(0, 1024*1024);
   }
 
   /**
-   * Get fullscreen support -
-   *
-   * `FlvH265` does not allow fullscreen through javascript
-   * so this always returns false.
+   * Get fullscreen support
    *
    * @return {boolean}
-   *         The `FlvH265` tech does not support fullscreen, so it will always return false.
+   *         The `FlvH265` tech support fullscreen
    */
   supportsFullScreen() {
     return true;
+  }
+
+  enterFullScreen(){
+    self.$canvas.requestFullscreen();
+  }
+
+  dispose() {
+    this.player && this.player.destroy();
+    super.dispose();
+  }
+
+  setVolume(){}
+
+  muted(){}
+
+  volume(){
+    return 1.0;
+  }
+
+  ended(){}
+
+  log() {
+    if (this.debug) {
+      return window.console.log;
+    } else return () => {}
   }
 
 }
@@ -176,13 +195,13 @@ class FlvH265 extends Tech {
  * @type {Array}
  */
 FlvH265.Events = [
-  "loadstart", 
-  "play", 
-  "pause", 
-  "playing", 
-  "ended", 
-  "volumechange", 
-  "durationchange", 
+  "loadstart",
+  "play",
+  "pause",
+  "playing",
+  "ended",
+  "volumechange",
+  "durationchange",
   "error"
 ];
 
@@ -203,7 +222,7 @@ FlvH265.isSupported = function () {
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
 FlvH265.canPlayType = function (type) {
-  return (type.indexOf('/x-flv') !== -1) ? 'maybe' : '';
+  return (type.indexOf('/x-flv-h265') !== -1) ? 'probably' : (type.indexOf('/x-flv') !== -1) ? 'maybe' : '';
 };
 
 /*
@@ -212,18 +231,19 @@ FlvH265.canPlayType = function (type) {
  * @return {String}         'probably', 'maybe', or '' (empty string)
  */
 FlvH265.canPlaySource = function (srcObj) {
-  return `probably`;//WXInlinePlayer.canPlayType(srcObj.type);
+  return FlvH265.canPlayType(srcObj.type);
 };
 
 FlvH265.embed = function (objId) {
-  const code = `<canvas id="${objId}" style="width:100%;height:100%;"></canvas>`;
+  const code = `<canvas id="${objId}"></canvas>`;
 
   // Get element by embedding code and retrieving created element
-  const obj = Dom.createEl('div', { innerHTML: code }).childNodes[0];
+  const obj = Dom.createEl('div', {
+    innerHTML: code
+  }).childNodes[0];
 
   return obj;
 };
-
 
 Tech.registerTech('Flvh265', FlvH265);
 export default FlvH265;
