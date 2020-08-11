@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>videojs-flvh265 Demo</title>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <style>
+    /*点击屏幕播放/暂停*/
+    .video-js.vjs-playing .vjs-tech {
+      pointer-events: auto;
+    }
+
+    .video-js .vjs-time-control {
+      display: block;
+    }
+
+    /* 暂停时显示播放按钮 */
+    .vjs-paused .vjs-big-play-button,
+    .vjs-paused.vjs-has-started .vjs-big-play-button {
+      display: block;
+    }
+
+    /* 进度显示当前播放时间 */
+    .video-js .vjs-remaining-time {
+      display: none;
+    }
+
+    /* 播放按钮变圆形 */
+    .video-js .vjs-big-play-button {
+      font-size: 2.5em;
+      line-height: 2.3em;
+      height: 2.5em;
+      width: 2.5em;
+      -webkit-border-radius: 2.5em;
+      -moz-border-radius: 2.5em;
+      border-radius: 2.5em;
+      background-color: #73859f;
+      background-color: rgba(115, 133, 159, .5);
+      border-width: 0.15em;
+      margin-top: -1.25em;
+      margin-left: -1.75em;
+    }
+
+    /* 中间的播放箭头 */
+    .vjs-big-play-button .vjs-icon-placeholder {
+      font-size: 1.63em;
+    }
+
+    /* 加载圆圈 */
+    .vjs-loading-spinner {
+      font-size: 2.5em;
+      width: 2em;
+      height: 2em;
+      border-radius: 1em;
+      margin-top: -1em;
+      margin-left: -1.5em;
+    }
+  </style>
+</head>
+
+<body>
+  <video id="videojs-flv-h265-player" height="200" width="400" class="video-js vjs-big-play-centered" controls>
+    <source src="https://ks3-cn-beijing.ksyun.com/ksplayer/h265/outside_demo/v1.1.3/720P2M30fpsh265-wasmtest.flv"
+      type='video/x-flv'>
+  </video>
+  <script type="text/javascript" src="/dist/bundle.js"></script>
+</body>
+
+</html>
