@@ -129,7 +129,7 @@ class FlvH265 extends Tech {
 
   /**
    * Called by {@link Player#play} to play using the `FlvH265` Tech.
-   * 包括多种功能
+   * 这个钩子函数包括多种职责，videojs代码封装得真烂
    * 1.首次播放
    * 2.暂停后继续播放
    */
