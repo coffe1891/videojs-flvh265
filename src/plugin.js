@@ -29,7 +29,7 @@ class FlvH265 extends Tech {
     self.debug = true;
 
     // Merge default parames with ones passed in
-    const params = mergeOptions({
+    self.params = mergeOptions({
       asmUrl: './node_modules/wx-inline-player-new/lib/prod.h265.asm.combine.js',
       wasmUrl: './node_modules/wx-inline-player-new/lib/prod.h265.wasm.combine.js',
       url: options.source.src,
@@ -40,7 +40,7 @@ class FlvH265 extends Tech {
       muted: options.muted !== undefined ? options.muted : false,
       autoplay: options.autoplay,
       loop: options.loop !== undefined ? options.loop : false,
-      isLive: true,
+      isLive: false,
       chunkSize: 128 * 1024,
       preloadTime: 5e2,
       bufferingTime: 1e3,
@@ -48,10 +48,10 @@ class FlvH265 extends Tech {
       customLoader: null
     }, options.params);
 
-    WXInlinePlayer.ready(params).then(player => {
+    WXInlinePlayer.ready(self.params).then(player => {
       self.triggerReady();
       self.player = player;
-      self.initEvent_(params);
+      self.initEvent_(self.params);
     });
   }
 
@@ -80,6 +80,7 @@ class FlvH265 extends Tech {
     let $canvas = self.$canvas = params.$container;
     let videoHeight = self.el_.parentElement.offsetHeight;
     let videoWidth = self.el_.parentElement.offsetWidth;
+
     //set the canvas' height and width
     self.player.on('mediaInfo', mediaInfo => {
       self.log()(`mediaInfo`, mediaInfo, videoHeight, videoWidth);
@@ -96,25 +97,57 @@ class FlvH265 extends Tech {
           $canvas.width = onMetaData[i].width;
         }
       }
-      //2.这里指定高宽，是拉伸canvas以便填满指定高宽的矩形
-      $canvas.style.height = '100%';//videoHeight + `px`;
-      $canvas.style.width = '100%';//videoWidth + `px`;
+      //2.这里指定高宽，是拉伸canvas以便填满指定高宽的矩形。设成100%以便全屏时自动缩放
+      $canvas.style.height = '100%'; //videoHeight + `px`;
+      $canvas.style.width = '100%'; //videoWidth + `px`;
       self.log()(`mediaInfo`, $canvas.height, $canvas.width);
     });
+
+    //set other events
+    /*for (let k in FlvH265.Events) {
+      self.log()(k);
+      this.player.on(FlvH265.Events[k], function(d){
+        self.trigger(k, d)
+      });
+    }*/
+    self.player.on('play', function(){
+      document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
+      self.trigger('play')
+    });
+
+    self.player.on('playing', function(){
+      document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
+      // self.trigger('playing')
+    });
+
+    self.player.on('paused', function(){
+      document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='block';
+      self.trigger('paused')
+    });
+
   }
 
   /**
    * Called by {@link Player#play} to play using the `FlvH265` Tech.
+   * 包括多种功能
+   * 1.首次播放
+   * 2.暂停后继续播放
    */
   play() {
-    this.player.play();
+    if(this.player.state == "paused")
+      this.params.isLive ? this.player.play() : this.player.resume();
+    else
+      this.player.play();
+  }
+
+  played(){
   }
 
   /**
    * Called by {@link Player#pause} to pause using the `FlvH265` `Tech`.
    */
   pause() {
-    this.player.pause();
+    this.params.isLive ? this.play.stop() : this.player.pause();
   }
 
   paused() {
@@ -138,7 +171,7 @@ class FlvH265 extends Tech {
    8          The total duration of the current media.
    */
   duration() {
-    return this.player.getAvaiableDuration();
+    return this.player.getDuration();
   }
 
   /**
@@ -148,7 +181,7 @@ class FlvH265 extends Tech {
    *         The time range object that was created.
    */
   buffered() {
-    return createTimeRange(0, 1024*1024);
+    return createTimeRange(0, 1024 * 1024);
   }
 
   /**
@@ -161,7 +194,7 @@ class FlvH265 extends Tech {
     return true;
   }
 
-  enterFullScreen(){
+  enterFullScreen() {
     self.$canvas.requestFullscreen();
   }
 
@@ -170,15 +203,21 @@ class FlvH265 extends Tech {
     super.dispose();
   }
 
-  setVolume(){}
-
-  muted(){}
-
-  volume(){
-    return 1.0;
+  setVolume(p) {
+    this.volume(p);
   }
 
-  ended(){}
+  muted(p) {
+    return this.player.mute(p);
+  }
+
+  volume(p) {
+    return this.player.volume(p);
+  }
+
+  ended() {
+    return this.player.isEnd; 
+  }
 
   log() {
     if (this.debug) {
@@ -192,18 +231,18 @@ class FlvH265 extends Tech {
  * An array of events available on the `FlvH265` tech.
  *
  * @private
- * @type {Array}
+ * @type {JSON}
  */
-FlvH265.Events = [
-  "loadstart",
-  "play",
-  "pause",
-  "playing",
-  "ended",
-  "volumechange",
-  "durationchange",
-  "error"
-];
+FlvH265.Events = {
+  loadstart: "loadSuccess",
+  play: "play",
+  pause: "paused",
+  playing: "playing",
+  ended: "end",
+  volumechange: "",
+  durationchange: "timeUpdate",
+  error: "loadError"
+};
 
 /**
  * Check if the `FlvH265` tech is currently supported.
