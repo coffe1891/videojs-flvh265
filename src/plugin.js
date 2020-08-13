@@ -28,30 +28,42 @@ class FlvH265 extends Tech {
 
     self.debug = true;
 
+    //7.8.4丢失了这个属性，和github源码不一致，手动补全
+    self.options_.disablePictureInPicture = true;
+
+    // 下面4个参数要可以动态设置
+    let decodeType = options.isH265?"h265":"all"
+    let isLive = true;
+    let hasVideo = true;
+    let hasAudio = true;
+
     // Merge default parames with ones passed in
-    self.params = mergeOptions({
-      asmUrl: './node_modules/wx-inline-player-new/lib/prod.h265.asm.combine.js',
-      wasmUrl: './node_modules/wx-inline-player-new/lib/prod.h265.wasm.combine.js',
-      url: options.source.src,
+    self.params = {
+      asmUrl: `./dist/lib/prod.${decodeType}.asm.combine.js`,
+      wasmUrl: `./dist/lib/prod.${decodeType}.wasm.combine.js`,
+      url: self.options_.source.src,
       $container: self.el_,
-      hasVideo: true,
-      hasAudio: true,
+      hasVideo,
+      hasAudio,
       volume: 1.0,
-      muted: options.muted !== undefined ? options.muted : false,
-      autoplay: options.autoplay,
-      loop: options.loop !== undefined ? options.loop : false,
-      isLive: false,
+      muted: self.options_.muted !== undefined ? self.options_.muted : false,
+      autoplay: self.options_.autoplay,
+      loop: self.options_.loop !== undefined ? self.options_.loop : false,
+      isLive,
       chunkSize: 128 * 1024,
       preloadTime: 5e2,
       bufferingTime: 1e3,
       cacheSegmentCount: 64,
       customLoader: null
-    }, options.params);
+    };
 
     WXInlinePlayer.ready(self.params).then(player => {
       self.triggerReady();
       self.player = player;
       self.initEvent_(self.params);
+
+      if(self.params.autoplay)
+        self.play();
     });
   }
 
@@ -104,32 +116,55 @@ class FlvH265 extends Tech {
     });
 
     //set other events
-    /*for (let k in FlvH265.Events) {
+
+    /**
+     * An array of events available on the `FlvH265` tech.
+     *
+     * @private
+     * @type {JSON}
+     */
+    const Events = {
+      loadstart: "loadSuccess",
+      play: "play",
+      pause: "paused",
+      playing: "playing",
+      ended: "end",
+      volumechange: "",
+      durationchange: "timeUpdate",
+      error: "loadError"
+    };
+
+    /*for (let k in Events) {
       self.log()(k);
-      this.player.on(FlvH265.Events[k], function(d){
+      this.player.on(Events[k], function(d){
         self.trigger(k, d)
       });
     }*/
+
     self.player.on('play', function(){
       document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
-      self.trigger('play')
+      self.trigger('play');
     });
 
     self.player.on('playing', function(){
       document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
-      // self.trigger('playing')
+      // self.trigger('playing');
     });
 
     self.player.on('paused', function(){
       document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='block';
-      self.trigger('paused')
+      self.trigger('paused');
+    });
+    
+    self.player.on('timeUpdate', function(d){
+      self.trigger('durationchange',d/1000);
     });
 
   }
 
   /**
    * Called by {@link Player#play} to play using the `FlvH265` Tech.
-   * 这个钩子函数包括多种职责，videojs代码封装得真烂
+   * videojs的这个钩子函数包括多种职责（这是不妥的）
    * 1.首次播放
    * 2.暂停后继续播放
    */
@@ -147,7 +182,7 @@ class FlvH265 extends Tech {
    * Called by {@link Player#pause} to pause using the `FlvH265` `Tech`.
    */
   pause() {
-    this.params.isLive ? this.play.stop() : this.player.pause();
+    this.params.isLive ? this.player.stop() : this.player.pause();
   }
 
   paused() {
@@ -160,8 +195,8 @@ class FlvH265 extends Tech {
    * @return {number}
    *         The current time of playback in seconds.
    */
-  currentTime() {
-    return this.player.getCurrentTime();
+  currentTime(p) {
+    return this.player.getCurrentTime(p*1000)/1000;
   }
 
   /**
@@ -171,7 +206,7 @@ class FlvH265 extends Tech {
    8          The total duration of the current media.
    */
   duration() {
-    return this.player.getDuration();
+    return this.player.getDuration()/1000;
   }
 
   /**
@@ -211,12 +246,28 @@ class FlvH265 extends Tech {
     return this.player.mute(p);
   }
 
+  setMuted(p){
+    this.muted(p);
+  }
+
   volume(p) {
     return this.player.volume(p);
   }
 
   ended() {
     return this.player.isEnd; 
+  }
+
+  requestPictureInPicture(){
+    if(!this.disablePictureInPicture())
+      throw new Error(`flvh265 don't support Picture In Picture.`)
+  }
+
+  disablePictureInPicture(p){
+    if (p === undefined) {
+      return this.options_.disablePictureInPicture;
+    }
+    this.options_.disablePictureInPicture = p;    
   }
 
   log() {
@@ -226,23 +277,6 @@ class FlvH265 extends Tech {
   }
 
 }
-
-/**
- * An array of events available on the `FlvH265` tech.
- *
- * @private
- * @type {JSON}
- */
-FlvH265.Events = {
-  loadstart: "loadSuccess",
-  play: "play",
-  pause: "paused",
-  playing: "playing",
-  ended: "end",
-  volumechange: "",
-  durationchange: "timeUpdate",
-  error: "loadError"
-};
 
 /**
  * Check if the `FlvH265` tech is currently supported.
