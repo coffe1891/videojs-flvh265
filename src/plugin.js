@@ -2,7 +2,7 @@ import videojs from '../node_modules/video.js/dist/video.js';
 import {
   version as VERSION
 } from '../package.json';
-import WXInlinePlayer from 'wx-inline-player-new';
+import WXInlinePlayer from './lib/index';//'wx-inline-player-new';
 import window from 'global/window';
 
 const Tech = videojs.getComponent('Tech');
@@ -27,13 +27,14 @@ class FlvH265 extends Tech {
     let self = this;
 
     self.debug = true;
+    self.currentTime_ = 0;
 
     //7.8.4丢失了这个属性，和github源码不一致，手动补全
     self.options_.disablePictureInPicture = true;
 
     // 下面4个参数要可以动态设置
-    let decodeType = options.isH265?"h265":"all"
-    let isLive = true;
+    let decodeType = true?"h265":"all"
+    let isLive = false;
     let hasVideo = true;
     let hasAudio = true;
 
@@ -142,22 +143,32 @@ class FlvH265 extends Tech {
     }*/
 
     self.player.on('play', function(){
-      document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
+      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
+      self.trigger('play');
+    });
+
+    self.player.on('resumed', function(){
+      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       self.trigger('play');
     });
 
     self.player.on('playing', function(){
-      document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
+      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       // self.trigger('playing');
     });
 
     self.player.on('paused', function(){
-      document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='block';
-      self.trigger('paused');
+      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='block';
+      self.trigger('pause');
     });
     
     self.player.on('timeUpdate', function(d){
+      self.log()(self.duration()/1000,d/1000)
       self.trigger('durationchange',d/1000);
+    });
+
+    self.player.on('ended', function(){
+      self.trigger('ended');
     });
 
   }
@@ -167,12 +178,21 @@ class FlvH265 extends Tech {
    * videojs的这个钩子函数包括多种职责（这是不妥的）
    * 1.首次播放
    * 2.暂停后继续播放
+   * 3.重播
    */
   play() {
-    if(this.player.state == "paused")
-      this.params.isLive ? this.player.play() : this.player.resume();
-    else
+    //重播
+    if (this.ended()) {
+      this.player.stop();
       this.player.play();
+    }
+    //非重播
+    else{
+      if(this.player.state == "paused")
+        this.params.isLive ? this.player.play() : this.player.resume();
+      else
+        this.player.play();
+    }
   }
 
   played(){
@@ -196,7 +216,11 @@ class FlvH265 extends Tech {
    *         The current time of playback in seconds.
    */
   currentTime(p) {
-    return this.player.getCurrentTime(p*1000)/1000;
+    if(p==undefined){
+      return this.player.currentTime()/1000;
+    }else{     
+      this.player.currentTime(p*1000); 
+    }
   }
 
   /**

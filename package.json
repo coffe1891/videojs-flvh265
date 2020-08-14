@@ -25,7 +25,7 @@
   "dependencies": {
     "global": "^4.4.0",
     "video.js": "^7",
-    "wx-inline-player-new": "^1.0.6"
+    "wx-inline-player-new": "^1.0.7"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^6.0.3",
