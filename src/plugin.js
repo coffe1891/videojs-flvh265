@@ -14,6 +14,22 @@ const mergeOptions = videojs.mergeOptions;
 const navigator = window && window.navigator || {};
 
 /**
+ * 生命周期对应的状态
+ */
+const STATE = {
+  created: "created",
+  play: "play",
+  playing: "playing",
+  buffering: "buffering",
+  /**video.js没有stopped状态，paused也包含stopped */
+  paused: "paused",
+  resumed: "resumed",
+  // ended: "ended", video.js没有ended这个状态
+  stopped: "stopped",
+  destroyed: "destroyed"
+};
+
+/**
  * Media Controller - Wrapper for Media API
  *
  * @mixes WXInlinePlayer
@@ -28,6 +44,8 @@ class FlvH265 extends Tech {
 
     self.debug = true;
     self.currentTime_ = 0;
+    self.sate = STATE.created; //状态，hack for video.js
+    self.isEnded = false; //因为videol.js没有ended状态，这里单独设置一个变量（非状态）标志是否播放完，
 
     //7.8.4丢失了这个属性，和github源码不一致，手动补全
     self.options_.disablePictureInPicture = true;
@@ -129,7 +147,7 @@ class FlvH265 extends Tech {
       play: "play",
       pause: "paused",
       playing: "playing",
-      ended: "end",
+      ended: "ended",
       volumechange: "",
       durationchange: "timeUpdate",
       error: "loadError"
@@ -145,30 +163,42 @@ class FlvH265 extends Tech {
     self.player.on('play', function(){
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       self.trigger('play');
+      self.state = STATE.play;
+      self.isEnded = false;
     });
-
     self.player.on('resumed', function(){
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       self.trigger('play');
+      self.state = STATE.play;
     });
 
     self.player.on('playing', function(){
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       // self.trigger('playing');
+      self.state = STATE.playing;
     });
 
     self.player.on('paused', function(){
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='block';
       self.trigger('pause');
+      self.state = STATE.paused;
+    });
+    //video.js没有stopped，适配一下video.js的事件
+    self.player.on('stopped', function () {
+      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='block';
+      self.trigger('pause');
+      self.state = STATE.paused;
     });
     
     self.player.on('timeUpdate', function(d){
-      self.log()(self.duration()/1000,d/1000)
+      self.log()(self.duration(),d/1000)
       self.trigger('durationchange',d/1000);
     });
 
     self.player.on('ended', function(){
       self.trigger('ended');
+      self.state = STATE.paused;
+      self.isEnded = true;
     });
 
   }
@@ -182,13 +212,15 @@ class FlvH265 extends Tech {
    */
   play() {
     //重播
+    console.log("state:",this.state)
     if (this.ended()) {
+      this.currentTime(0);
       this.player.stop();
       this.player.play();
     }
     //非重播
     else{
-      if(this.player.state == "paused")
+      if(this.state == STATE.paused)
         this.params.isLive ? this.player.play() : this.player.resume();
       else
         this.player.play();
@@ -202,11 +234,13 @@ class FlvH265 extends Tech {
    * Called by {@link Player#pause} to pause using the `FlvH265` `Tech`.
    */
   pause() {
+    console.log("////////////paused/////////// st state:", this.state)
     this.params.isLive ? this.player.stop() : this.player.pause();
+    console.log("////////////paused/////////// ed state:", this.state)
   }
 
   paused() {
-    return this.player.state == 'paused';
+    return this.state == STATE.paused;
   }
 
   /**
@@ -279,7 +313,7 @@ class FlvH265 extends Tech {
   }
 
   ended() {
-    return this.player.isEnd; 
+    return this.isEnded; 
   }
 
   requestPictureInPicture(){
