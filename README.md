@@ -1,7 +1,7 @@
 # videojs-flvh265
 
 videojs&#39; Tech for flv+h265.
-Make [videojs](http://videojs.com/) has the ability to play .flv encoded with h264 or h265.
+Make [Video.js](http://videojs.com/) has the ability to play .flv live or local video encoded with h264 or h265.
 
 ## Installation
 
@@ -91,4 +91,4 @@ videojs('player', {
 
 ## License
 
-MIT. Copyright (c) coffe1891 &lt;kai.ma@163.com&gt;
+MIT. Copyright (c) [coffe1891](https://github.com/coffe1891).
