@@ -1,6 +1,7 @@
 # videojs-flvh265
 
-videojs&#39; Tech for flv+h265
+videojs&#39; Tech for flv+h265.
+Make [videojs](http://videojs.com/) has the ability to play .flv encode with h264 or h265.
 
 ## Installation
 
@@ -17,47 +18,38 @@ To include videojs-flvh265 on your website or web application, use any of the fo
 This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js][videojs], so that the `videojs` global is available.
 
 ```html
-<script src="//path/to/video.min.js"></script>
-<script src="//path/to/videojs-flvh265.min.js"></script>
+<video id="player" 
+  height="300" 
+  width="600" 
+  class="video-js vjs-big-play-centered"
+  controls
+  autoplay
+  loop
+  ish265
+  islive
+  hasvideo
+  hasaudio
+>
+  <source src="http://localhost:8080/src/10.flv" type='video/x-flv'/>
+</video>`
+<script src="//path/to/video.js"></script>
+<script src="//path/to/videojs-flvh265.js"></script>
 <script>
-  var player = videojs('my-video');
-
-  player.flvH265();
+videojs('player', {
+  techOrder: [
+    'html5',
+    'flvh265'
+  ],
+  controlBar:{
+    pictureInPictureToggle:false
+  }
+});
 </script>
 ```
 
-### Browserify/CommonJS
+### `ECMAScript`
 
-When using with Browserify, install videojs-flvh265 via npm and `require` the plugin as you would any other module.
-
-```js
-var videojs = require('video.js');
-
-// The actual plugin function is exported by this module, but it is also
-// attached to the `Player.prototype`; so, there is no need to assign it
-// to a variable.
-require('videojs-flvh265');
-
-var player = videojs('my-video');
-
-player.flvH265();
-```
-
-### RequireJS/AMD
-
-When using with RequireJS (or another AMD library), get the script in whatever way you prefer and `require` the plugin as you normally would:
-
-```js
-require(['video.js', 'videojs-flvh265'], function(videojs) {
-  var player = videojs('my-video');
-
-  player.flvH265();
-});
-```
 
 ## License
 
 MIT. Copyright (c) coffe1891 &lt;kai.ma@163.com&gt;
-
-
-[videojs]: http://videojs.com/
