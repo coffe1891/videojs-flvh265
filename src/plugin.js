@@ -29,6 +29,12 @@ const STATE = {
   destroyed: "destroyed"
 };
 
+
+/**支持的自定义属性，作为<video>标签的属性。
+ * 外部设置属性时并不区分大小写。
+ */
+const supportAttrs = ['isH265','isLive','hasVideo','hasAudio'];
+
 /**
  * Media Controller - Wrapper for Media API
  *
@@ -48,33 +54,26 @@ class FlvH265 extends Tech {
     self.isEnded = false; //因为videol.js没有ended状态，这里单独设置一个变量（非状态）标志是否播放完，
 
     //7.8.4丢失了这个属性，和github源码不一致，手动补全
-    self.options_.disablePictureInPicture = true;
+    self.options_.disablePictureInPicture = true; 
 
-    // 下面4个参数要可以动态设置
-    let decodeType = true?"h265":"all"
-    let isLive = false;
-    let hasVideo = true;
-    let hasAudio = true;
 
+    let _isH265 = self.params.isH265?"h265":"all";
     // Merge default parames with ones passed in
-    self.params = {
-      asmUrl: `./dist/lib/prod.${decodeType}.asm.combine.js`,
-      wasmUrl: `./dist/lib/prod.${decodeType}.wasm.combine.js`,
+    self.params = Object.assign({
+      asmUrl:   `./dist/lib/prod.${_isH265}.asm.combine.js`,
+      wasmUrl:  `./dist/lib/prod.${_isH265}.wasm.combine.js`,
       url: self.options_.source.src,
       $container: self.el_,
-      hasVideo,
-      hasAudio,
       volume: 1.0,
       muted: self.options_.muted !== undefined ? self.options_.muted : false,
       autoplay: self.options_.autoplay,
       loop: self.options_.loop !== undefined ? self.options_.loop : false,
-      isLive,
       chunkSize: 128 * 1024,
       preloadTime: 5e2,
       bufferingTime: 1e3,
       cacheSegmentCount: 64,
       customLoader: null
-    };
+    },self.params);
 
     WXInlinePlayer.ready(self.params).then(player => {
       self.triggerReady();
@@ -94,6 +93,8 @@ class FlvH265 extends Tech {
    */
   createEl() {
     let self = this;
+    self.params = FlvH265.getAttributes_(document.getElementById(self.options_.playerId));
+
     const options = self.options_;
 
     // Generate ID for canvas object
@@ -104,6 +105,50 @@ class FlvH265 extends Tech {
     self.el_.tech = self;
 
     return self.el_;
+  }
+
+  static getAttributes_(tag) {
+    const obj = {};  
+    const tmpArr = supportAttrs.map(item=>item.toLocaleLowerCase());
+    // known boolean attributes
+    // we can check for matching boolean properties, but not all browsers
+    // and not all tags know about these attributes, so, we still want to check them manually
+    const knownBooleans = ',' + tmpArr.join(',')+ ',';
+  
+    if (tag && tag.attributes && tag.attributes.length > 0) {
+      const attrs = tag.attributes;
+  
+      for (let i = attrs.length - 1; i >= 0; i--) {
+        const attrName = attrs[i].name;
+        let finalAttrName = '';
+        let index = tmpArr.indexOf(attrName);
+        if(index===-1) 
+          continue;
+        else{
+          finalAttrName=supportAttrs[index];
+        }
+
+        let attrVal = attrs[i].value;
+  
+        // check for known booleans
+        // the matching element property will return a value for typeof
+        if (typeof tag[attrName] === 'boolean' || knownBooleans.indexOf(',' + attrName + ',') !== -1) {
+          // the value of an included boolean attribute is typically an empty
+          // string ('') which would equal false if we just check for a false value.
+          // we also don't want support bad code like autoplay='false'
+          attrVal = (attrVal !== null) ? true : false;
+        }
+  
+        obj[finalAttrName] = attrVal;
+      }
+    }
+  
+    return Object.assign({
+        isH265:false,
+        isLive:false,
+        hasVideo:false,
+        hasAudio:false
+      },obj);
   }
 
   initEvent_(params) {
