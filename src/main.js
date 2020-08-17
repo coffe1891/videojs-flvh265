@@ -2,10 +2,10 @@ import videojs from '../node_modules/video.js/dist/video.js';
 import './plugin.js';
 
 (() => {
-	let num = 4;
+	let num = 9;
 	let html = '';
-	let height=300;
-	let width=540;
+	let height=200;
+	let width=360;
 
 	for (let i = 0; i < num; i++) {
 		html += createDom(i);
