@@ -17,6 +17,12 @@ hasvideo  // boolean
 hasaudio  // boolean
 ```
 
+## DEMO
+
+```sh
+npm run serve
+```
+
 ## Quick start
 
 To include videojs-flvh265 on your website or web application, use any of the following methods.
