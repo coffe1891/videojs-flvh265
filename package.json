@@ -1,15 +1,23 @@
 {
   "name": "videojs-flvh265",
   "version": "1.0.0",
-  "description": "videojs' Tech for flv+h265",
+  "description": "videojs' Tech for flv+h265/h264",
   "author": "coffe1891 <kai.ma@163.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/coffe1891/videojs-flvh265.git"
   },
+  "main":"dist/videojs-flvh265.js",
+  "files": [
+    "README.md",
+    "dist/",
+    "index.html"
+  ],
   "scripts": {
-    "serve": "webpack-dev-server --open --config webpack.config.js"
+    "serve": "webpack-dev-server --open --config webpack.config.js",
+    "prebuild": "rimraf dist",
+    "build": "webpack --config webpack.config.build.js --progress --colors"
   },
   "engines": {
     "node": ">=8",
@@ -20,15 +28,16 @@
     "videojs",
     "videojs-tech",
     "h265",
+    "h264",
     "flv"
   ],
-  "dependencies": {
-    "global": "^4.4.0",
+  "dependencies": {    
     "video.js": "^7",
-    "wx-inline-player-new": "^1.0.7"
+    "wx-inline-player-new": "^1.0.8"
   },
-  "devDependencies": {
+  "devDependencies": {    
     "copy-webpack-plugin": "^6.0.3",
+    "rimraf": "^3.0.2",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0"

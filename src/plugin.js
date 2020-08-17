@@ -1,17 +1,10 @@
 import videojs from '../node_modules/video.js/dist/video.js';
-import {
-  version as VERSION
-} from '../package.json';
-import WXInlinePlayer from './lib/index';//'wx-inline-player-new';
-import window from 'global/window';
+import WXInlinePlayer from 'wx-inline-player-new';
+import { version as VERSION } from '../package.json';
 
 const Tech = videojs.getComponent('Tech');
 const Dom = videojs.dom;
-const Url = videojs.url;
 const createTimeRange = videojs.createTimeRange;
-const mergeOptions = videojs.mergeOptions;
-
-const navigator = window && window.navigator || {};
 
 /**
  * 生命周期对应的状态
@@ -375,7 +368,7 @@ class FlvH265 extends Tech {
 
   log() {
     if (this.debug) {
-      return window.console.log;
+      return console.log;
     } else return () => {}
   }
 
@@ -420,6 +413,8 @@ FlvH265.embed = function (objId) {
 
   return obj;
 };
+
+FlvH265.VERSION = VERSION;
 
 Tech.registerTech('Flvh265', FlvH265);
 export default FlvH265;
