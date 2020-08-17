@@ -29,7 +29,7 @@ To include videojs-flvh265 on your website or web application, use any of the fo
 
 ### 1) ECMAScript ( Recommend)
 ```html
-<link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+<link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
 <video id="player" 
   height="300" 
   width="600" 
@@ -64,7 +64,7 @@ videojs('player', {
 This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js][videojs], so that the `videojs` global is available.
 
 ```html
-<link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+<link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
 <video id="player" 
   height="300" 
   width="600" 
@@ -79,8 +79,8 @@ This is the simplest case. Get the script in whatever way you prefer and include
 >
   <source src="http://localhost:8080/src/10.flv" type='video/x-flv'/>
 </video>`
-<script src="node_modules/video.js/dist/video.js"></script>
-<script src="node_modules/videojs-flvh265/dist/videojs-flvh265.js"></script>
+<script src="/node_modules/video.js/dist/video.js"></script>
+<script src="/node_modules/videojs-flvh265/dist/videojs-flvh265.js"></script>
 <script>
 videojs('player', {
   techOrder: [

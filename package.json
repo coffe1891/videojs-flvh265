@@ -1,6 +1,6 @@
 {
   "name": "videojs-flvh265",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "videojs' Tech for flv+h265/h264",
   "author": "coffe1891 <kai.ma@163.com>",
   "license": "MIT",

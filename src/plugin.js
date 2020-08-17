@@ -41,7 +41,7 @@ class FlvH265 extends Tech {
 
     let self = this;
 
-    self.debug = true;
+    self.debug = false;
     self.currentTime_ = 0;
     self.sate = STATE.created; //状态，hack for video.js
     self.isEnded = false; //因为videol.js没有ended状态，这里单独设置一个变量（非状态）标志是否播放完，
@@ -53,8 +53,8 @@ class FlvH265 extends Tech {
     let _isH265 = self.params.isH265?"h265":"all";
     // Merge default parames with ones passed in
     self.params = Object.assign({
-      asmUrl:   `./dist/lib/prod.${_isH265}.asm.combine.js`,
-      wasmUrl:  `./dist/lib/prod.${_isH265}.wasm.combine.js`,
+      asmUrl:   `/node_modules/wx-inline-player-new/lib/prod.${_isH265}.asm.combine.js`,
+      wasmUrl:  `/node_modules/wx-inline-player-new/lib/prod.${_isH265}.wasm.combine.js`,
       url: self.options_.source.src,
       $container: self.el_,
       volume: 1.0,
@@ -169,7 +169,6 @@ class FlvH265 extends Tech {
       //2.这里指定高宽，是拉伸canvas以便填满指定高宽的矩形。设成100%以便全屏时自动缩放
       $canvas.style.height = '100%'; //videoHeight + `px`;
       $canvas.style.width = '100%'; //videoWidth + `px`;
-      self.log()(`mediaInfo`, $canvas.height, $canvas.width);
     });
 
     //set other events
@@ -250,7 +249,6 @@ class FlvH265 extends Tech {
    */
   play() {
     //重播
-    console.log("state:",this.state)
     if (this.ended()) {
       this.currentTime(0);
       this.player.stop();
@@ -272,9 +270,7 @@ class FlvH265 extends Tech {
    * Called by {@link Player#pause} to pause using the `FlvH265` `Tech`.
    */
   pause() {
-    console.log("////////////paused/////////// st state:", this.state)
     this.params.isLive ? this.player.stop() : this.player.pause();
-    console.log("////////////paused/////////// ed state:", this.state)
   }
 
   paused() {

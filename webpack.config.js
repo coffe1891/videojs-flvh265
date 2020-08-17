@@ -15,12 +15,12 @@ module.exports = {
 		modules: [path.resolve('node_modules'), 'node_modules']
 	},
 	plugins: [
-		new CopyPlugin({
-			patterns: [{
-					from: path.resolve('node_modules','./wx-inline-player-new/lib/'),
-					to: path.join(__dirname, './dist/lib')
-				}
-			],
-		}),
+		// new CopyPlugin({
+		// 	patterns: [{
+		// 			from: path.resolve('node_modules','./wx-inline-player-new/lib/'),
+		// 			to: path.join(__dirname, './dist/lib')
+		// 		}
+		// 	],
+		// }),
 	],
 }
