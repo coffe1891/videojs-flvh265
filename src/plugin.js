@@ -1,4 +1,4 @@
-import videojs from 'video.js';
+import videojs from '../node_modules/video.js/dist/video.js';
 import WXInlinePlayer from 'wx-inline-player-new';
 import { version as VERSION } from '../package.json';
 
@@ -197,6 +197,10 @@ class FlvH265 extends Tech {
       });
     }*/
 
+    self.player.on('loadSuccess',function(){
+      self.trigger('loadstart');
+    });
+
     self.player.on('play', function(){
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       self.trigger('play');
@@ -236,6 +240,10 @@ class FlvH265 extends Tech {
       self.trigger('ended');
       self.state = STATE.paused;
       self.isEnded = true;
+    });
+
+    self.player.on('loadError',function(){
+      self.trigger('error');
     });
 
   }
@@ -330,20 +338,24 @@ class FlvH265 extends Tech {
     super.dispose();
   }
 
-  setVolume(p) {
-    this.volume(p);
-  }
-
   muted(p) {
+    // this.trigger("volumechange");
     return this.player.mute(p);
   }
 
   setMuted(p){
     this.muted(p);
+    this.trigger("volumechange");
   }
 
   volume(p) {
+    // this.trigger("volumechange");
     return this.player.volume(p);
+  }
+
+  setVolume(p) {    
+    this.volume(p);
+    this.trigger("volumechange");
   }
 
   ended() {
