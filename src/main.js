@@ -1,4 +1,4 @@
-import videojs from '../node_modules/video.js/dist/video.js';
+import videojs from 'video.js';
 import './plugin.js';
 
 (() => {
@@ -32,11 +32,11 @@ import './plugin.js';
 		 ish265
 		 hasvideo
 		 hasaudio
-		>
-			<!-- <source src="https://ks3-cn-beijing.ksyun.com/ksplayer/h265/outside_demo/v1.1.3/720P2M30fpsh265-wasmtest.flv" type='video/x-flv-h265' /> -->
-			<!-- <source src="https://liveplay.xiaoeknow.com/live/5060_dKZTfCE6z2t6ecSX.flv" type='video/x-flv-h265'/> -->
-			<source src="http://localhost:8080/src/5s_265.flv" type='video/x-flv'/>
-			<!-- <source src="http://localhost:8080/src/5s_264.flv" type='video/x-flv'/> -->
-		</video>`
+		>`
+			+ `<source src="https://ks3-cn-beijing.ksyun.com/ksplayer/h265/outside_demo/v1.1.3/720P2M30fpsh265-wasmtest.flv" type='video/x-flv-h265' />`
+			// + `<source src="https://liveplay.xiaoeknow.com/live/5060_dKZTfCE6z2t6ecSX.flv" type='video/x-flv-h265'/>`
+			// + `<source src="http://localhost:8080/src/5s_265.flv" type='video/x-flv'/>`
+			// + `<source src="http://localhost:8080/src/5s_264.flv" type='video/x-flv'/>`
+		+`</video>`;
 	}
 })();

@@ -1,4 +1,4 @@
-import videojs from '../node_modules/video.js/dist/video.js';
+import videojs from 'video.js';
 import WXInlinePlayer from 'wx-inline-player-new';
 import { version as VERSION } from '../package.json';
 
@@ -23,7 +23,8 @@ const STATE = {
 };
 
 
-/**支持的自定义属性，作为<video>标签的属性。
+/**
+ * 支持的自定义属性，作为<video>标签的属性。
  * 外部设置属性时并不区分大小写。
  */
 const supportAttrs = ['isH265','isLive','hasVideo','hasAudio'];
@@ -53,8 +54,8 @@ class FlvH265 extends Tech {
     let _isH265 = self.params.isH265?"h265":"all";
     // Merge default parames with ones passed in
     self.params = Object.assign({
-      asmUrl:   `/node_modules/wx-inline-player-new/lib/prod.${_isH265}.asm.combine.js`,
-      wasmUrl:  `/node_modules/wx-inline-player-new/lib/prod.${_isH265}.wasm.combine.js`,
+      asmUrl:   `/node_modules/wx-inline-player-new/example/prod.${_isH265}.asm.combine.js`,
+      wasmUrl:  `/node_modules/wx-inline-player-new/example/prod.${_isH265}.wasm.combine.js`,
       url: self.options_.source.src,
       $container: self.el_,
       volume: 1.0,

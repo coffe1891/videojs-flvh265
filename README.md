@@ -41,7 +41,7 @@ This is the simplest case. Get the script in whatever way you prefer and include
   hasvideo
   hasaudio
 >
-  <source src="http://localhost:8080/src/10.flv" type='video/x-flv'/>
+  <source src="http://localhost:8080/src/5s_265.flv" type='video/x-flv'/>
 </video>`
 <script src="/node_modules/video.js/dist/video.js"></script>
 <script src="/node_modules/videojs-flvh265/dist/videojs-flvh265.js"></script>
