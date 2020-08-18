@@ -1,4 +1,4 @@
-import videojs from 'video.js';
+import videojs from '../node_modules/video.js/dist/video.js';
 import './plugin.js';
 
 (() => {
@@ -19,6 +19,7 @@ import './plugin.js';
 				'flvh265'
 			],
 			controlBar:{
+				volumePanel:{inline:false},
 				pictureInPictureToggle:false
 			}
 		});
@@ -28,9 +29,7 @@ import './plugin.js';
 		return `
 		<video id="player${i}" height="${height}" width="${width}" class="video-js vjs-big-play-centered"
 		 controls
-		 loop
 		 ish265
-		 islive
 		 hasvideo
 		 hasaudio
 		>
