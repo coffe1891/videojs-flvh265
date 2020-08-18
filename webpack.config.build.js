@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-	mode: "development",//"production",
+	mode: "production",//"development",
 	entry: {
 		main: path.join(__dirname, './src/plugin.js')
 	},
