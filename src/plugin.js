@@ -1,4 +1,4 @@
-import videojs from '../node_modules/video.js/dist/video.js';
+import videojs from 'video.js';
 import WXInlinePlayer from 'wx-inline-player-new';
 import { version as VERSION } from '../package.json';
 
