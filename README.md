@@ -3,6 +3,13 @@
 This is a Video.js&#39; Tech for FLV + H265.
 Make [Video.js](http://videojs.com/) has the ability to play flv + live/local video encoded with h264/h265.
 
+## Features
+Format↓  | H.264 | H.265 | live stream | local file | seek | comment
+---------|-------|-------|-------------|------------|------|-------------
+**.flv** | √     | √     | √           | √          | ×    |
+**.mp4** | ×     | ×     | ×           | ×          | ×    | comming soon
+**.ts**  | ×     | ×     | ×           | ×          | ×    | no plan
+
 ## Installation
 
 ```sh
