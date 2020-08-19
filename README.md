@@ -18,10 +18,16 @@ npm install --save videojs-flvh265
 
 ## Four custom attributes for `<video>` Tag
 ```JavaScript
-ish265 // boolean: true means that video is encoded with h265, false means h264.
-islive  // boolean
+ish265    // boolean  : true/false
+          //            true means that video is encoded with h265, false means h264.
+islive    // boolean
 hasvideo  // boolean
 hasaudio  // boolean
+lib       // string   : Folder path of libs.
+          //            Default value of lib is "/node_modules/wx-inline-player-new/example/".
+          //            Most of the time, you must set libs folder path,just copy these libs from 
+          //            "/node_modules/wx-inline-player-new/example/" to your final folder,then set
+          //            lib="the final folder path",e.g. lib="https://www.domain.com/libs/"
 ```
 
 ## DEMO
