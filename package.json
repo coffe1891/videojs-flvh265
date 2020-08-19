@@ -3,7 +3,7 @@
   "version": "1.0.4",
   "description": "videojs' Tech for flv+h265/h264",
   "author": "coffe1891 <kai.ma@163.com>",
-  "license": "MIT",
+  "license": "GPL",
   "repository": {
     "type": "git",
     "url": "https://github.com/coffe1891/videojs-flvh265.git"

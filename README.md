@@ -74,7 +74,7 @@ videojs('player', {
 
 ## License
 
-MIT. Copyright (c) [coffe1891](https://github.com/coffe1891).
+GPL. Copyright (c) [coffe1891](https://github.com/coffe1891).
 
 ## Contact me
 
