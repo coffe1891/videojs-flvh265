@@ -16,7 +16,7 @@ Format↓  | H.264 | H.265 | live stream | local file | seek | comment
 npm install --save videojs-flvh265
 ```
 
-## Four custom attributes for `<video>` Tag
+## Custom attributes for `<video>` Tag
 ```JavaScript
 ish265    // boolean  : true/false
           //            true means that video is encoded with h265, false means h264.
