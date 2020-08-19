@@ -69,3 +69,8 @@ videojs('player', {
 ## License
 
 MIT. Copyright (c) [coffe1891](https://github.com/coffe1891).
+
+## Contact me
+
+* Email: kai521@gmail.com
+* Webchat: kenny2019
