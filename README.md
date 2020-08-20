@@ -7,7 +7,7 @@ Make [Video.js](http://videojs.com/) has the ability to play flv + live/local vi
 Format↓  | H.264 | H.265 | live stream | local file | seek | comment
 ---------|-------|-------|-------------|------------|------|-------------
 **.flv** | √     | √     | √           | √          | ×    |
-**.mp4** | ×     | ×     | ×           | ×          | ×    | comming soon
+**.mp4** | ×     | ×     | ×           | ×          | ×    | coming soon
 **.ts**  | ×     | ×     | ×           | ×          | ×    | no plan
 
 ## Installation
@@ -73,35 +73,8 @@ videojs('player', {
 ```
 
 ### 2. ECMAScript + Webpack
-```html
-<link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
-<video id="player" 
-  height="300" 
-  width="600" 
-  class="video-js vjs-big-play-centered"
-  controls
-  autoplay
-  loop
-  ish265
-  islive
-  hasvideo
-  hasaudio
->
-  <source src="http://localhost:8080/src/5s_265.flv" type='video/x-flv'/>
-</video>
-<script src="/node_modules/video.js/dist/video.js"></script>
-<script src="/node_modules/videojs-flvh265/dist/videojs-flvh265.js"></script>
-<script>
-videojs('player', {
-  techOrder: [
-    'html5',
-    'flvh265'
-  ],
-  controlBar:{
-    pictureInPictureToggle:false //we don't support pictureInPicture now
-  }
-});
-</script>
+```javascript
+// coming soon
 ```
 
 
