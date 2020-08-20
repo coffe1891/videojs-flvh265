@@ -1,7 +1,7 @@
 {
   "name": "videojs-flvh265",
-  "version": "1.0.4",
-  "description": "videojs' Tech for flv+h265/h264",
+  "version": "1.0.5",
+  "description": "Video.js' Tech for FLV+H.265/H.264",
   "author": "coffe1891 <kai.ma@163.com>",
   "license": "GPL",
   "repository": {
@@ -29,7 +29,8 @@
     "videojs-tech",
     "h265",
     "h264",
-    "flv"
+    "flv",
+    "playback"
   ],
   "dependencies": {
     "video.js": "^7",

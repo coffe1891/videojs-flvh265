@@ -38,8 +38,41 @@ npm run serve
 
 ## Quick start
 
-This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include [video.js][videojs], so that the `videojs` global is available.
+This is the simplest case. Get the script in whatever way you prefer and include the plugin _after_ you include **video.js**, so that the `videojs` global is available.
 
+### 1. Using `<script>` Tag
+```html
+<link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
+<video id="player" 
+  height="300" 
+  width="600" 
+  class="video-js vjs-big-play-centered"
+  controls
+  autoplay
+  loop
+  ish265
+  islive
+  hasvideo
+  hasaudio
+>
+  <source src="http://localhost:8080/src/5s_265.flv" type='video/x-flv'/>
+</video>`
+<script src="/node_modules/video.js/dist/video.js"></script>
+<script src="/node_modules/videojs-flvh265/dist/videojs-flvh265.js"></script>
+<script>
+videojs('player', {
+  techOrder: [
+    'html5',
+    'flvh265'
+  ],
+  controlBar:{
+    pictureInPictureToggle:false //we don't support pictureInPicture now
+  }
+});
+</script>
+```
+
+### 2. ECMAScript + Webpack
 ```html
 <link href="/node_modules/video.js/dist/video-js.css" rel="stylesheet">
 <video id="player" 
@@ -74,7 +107,7 @@ videojs('player', {
 
 ## License
 
-GPL. Copyright (c) [coffe1891](https://github.com/coffe1891).
+GPL Version 2. Copyright (c) [coffe1891](https://github.com/coffe1891).
 
 ## Contact me
 

@@ -12,12 +12,14 @@ import './plugin.js';
 	}
 	document.getElementById('container').innerHTML = html;
 
+	videojs.options.liveui=true;
 	for (let i = 0; i < num; i++) {
 		videojs('player' + i, {
 			techOrder: [
 				'html5',
 				'flvh265'
 			],
+			liveui:true,
 			controlBar:{
 				volumePanel:{inline:false},
 				pictureInPictureToggle:false
@@ -28,10 +30,11 @@ import './plugin.js';
 	function createDom(i) {
 		return `
 		<video id="player${i}" height="${height}" width="${width}" class="video-js vjs-big-play-centered"
-		 controls
+		 controls		 
 		 ish265
 		 hasvideo
 		 hasaudio
+		 lib="/node_modules/wx-inline-player-new/example/"
 		>`
 			+ `<source src="https://ks3-cn-beijing.ksyun.com/ksplayer/h265/outside_demo/v1.1.3/720P2M30fpsh265-wasmtest.flv" type='video/x-flv-h265' />`
 			// + `<source src="https://liveplay.xiaoeknow.com/live/5060_dKZTfCE6z2t6ecSX.flv" type='video/x-flv-h265'/>`

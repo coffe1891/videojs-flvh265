@@ -27,7 +27,7 @@ const STATE = {
  * 支持的自定义属性，作为<video>标签的属性。
  * 外部设置属性时并不区分大小写。
  */
-const supportAttrs = ['isH265','isLive','hasVideo','hasAudio'];
+const customAttrs = ['isH265','isLive','hasVideo','hasAudio','lib'];
 
 /**
  * Media Controller - Wrapper for Media API
@@ -52,10 +52,11 @@ class FlvH265 extends Tech {
 
 
     let _isH265 = self.params.isH265?"h265":"all";
+    let _lib = self.params.lib?self.params.lib:"/node_modules/wx-inline-player-new/example/";
     // Merge default parames with ones passed in
     self.params = Object.assign({
-      asmUrl:   `/node_modules/wx-inline-player-new/example/prod.${_isH265}.asm.combine.js`,
-      wasmUrl:  `/node_modules/wx-inline-player-new/example/prod.${_isH265}.wasm.combine.js`,
+      asmUrl:   `${_lib}/prod.${_isH265}.asm.combine.js`,
+      wasmUrl:  `${_lib}/prod.${_isH265}.wasm.combine.js`,
       url: self.options_.source.src,
       $container: self.el_,
       volume: 1.0,
@@ -103,11 +104,12 @@ class FlvH265 extends Tech {
 
   static getAttributes_(tag) {
     const obj = {};  
-    const tmpArr = supportAttrs.map(item=>item.toLocaleLowerCase());
+    const tmpArr = customAttrs.map(item=>item.toLocaleLowerCase());
+    const tmpArrBoolean = tmpArr.slice(0,tmpArr.length-1);
     // known boolean attributes
     // we can check for matching boolean properties, but not all browsers
     // and not all tags know about these attributes, so, we still want to check them manually
-    const knownBooleans = ',' + tmpArr.join(',')+ ',';
+    const knownBooleans = ',' + tmpArrBoolean.join(',')+ ',';
   
     if (tag && tag.attributes && tag.attributes.length > 0) {
       const attrs = tag.attributes;
@@ -119,7 +121,7 @@ class FlvH265 extends Tech {
         if(index===-1) 
           continue;
         else{
-          finalAttrName=supportAttrs[index];
+          finalAttrName=customAttrs[index];
         }
 
         let attrVal = attrs[i].value;
