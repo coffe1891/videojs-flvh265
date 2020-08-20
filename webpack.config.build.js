@@ -12,7 +12,7 @@ module.exports = {
 		filename: 'videojs-flvh265.js'
 	},
 	externals:{
-		// "video.js":"videojs",
+		"video.js":"videojs",
 		// "wx-inline-player-new":"WXInlinePlayer"
 	},
 	resolve: {

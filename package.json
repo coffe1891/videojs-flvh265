@@ -12,6 +12,7 @@
   "files": [
     "README.md",
     "dist/",
+    "src/",
     "index.html"
   ],
   "scripts": {

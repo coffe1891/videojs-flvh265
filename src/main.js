@@ -30,7 +30,7 @@ import './plugin.js';
 	function createDom(i) {
 		return `
 		<video id="player${i}" height="${height}" width="${width}" class="video-js vjs-big-play-centered"
-		 controls		 
+		 controls
 		 ish265
 		 hasvideo
 		 hasaudio
