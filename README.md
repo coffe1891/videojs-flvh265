@@ -88,7 +88,7 @@ videojs('player', {
   hasaudio
 >
   <source src="http://localhost:8080/src/5s_265.flv" type='video/x-flv'/>
-</video>`
+</video>
 <script src="/node_modules/video.js/dist/video.js"></script>
 <script src="/node_modules/videojs-flvh265/dist/videojs-flvh265.js"></script>
 <script>
