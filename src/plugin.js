@@ -220,7 +220,7 @@ class FlvH265 extends Tech {
 
     self.player.on('playing', function(){
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
-      // self.trigger('playing');
+      self.trigger('playing');
       self.state = STATE.playing;
     });
 
@@ -381,6 +381,10 @@ class FlvH265 extends Tech {
       return this.options_.disablePictureInPicture;
     }
     this.options_.disablePictureInPicture = p;    
+  }
+
+  playbackRate(){
+    return 1;
   }
 
   log() {
