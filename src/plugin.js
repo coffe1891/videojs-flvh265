@@ -24,6 +24,25 @@ const STATE = {
 
 
 /**
+ * An array of events available on the `FlvH265` tech.
+ * no used now.
+ *
+ * @private
+ * @type {JSON}
+ */
+const EVENT = {
+  loadstart: "loadSuccess",
+  play: "play",
+  pause: "paused",
+  playing: "playing",
+  waiting:"buffering",
+  ended: "ended",
+  volumechange: "",
+  durationchange: "timeUpdate",
+  error: "loadError"
+};
+
+/**
  * 支持的自定义属性，作为<video>标签的属性。
  * 外部设置属性时并不区分大小写。
  */
@@ -176,23 +195,6 @@ class FlvH265 extends Tech {
 
     //set other events
 
-    /**
-     * An array of events available on the `FlvH265` tech.
-     *
-     * @private
-     * @type {JSON}
-     */
-    const Events = {
-      loadstart: "loadSuccess",
-      play: "play",
-      pause: "paused",
-      playing: "playing",
-      ended: "ended",
-      volumechange: "",
-      durationchange: "timeUpdate",
-      error: "loadError"
-    };
-
     /*for (let k in Events) {
       self.log()(k);
       this.player.on(Events[k], function(d){
@@ -220,6 +222,10 @@ class FlvH265 extends Tech {
       // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       // self.trigger('playing');
       self.state = STATE.playing;
+    });
+
+    self.player.on('buffering',function(){
+      self.trigger('waiting');
     });
 
     self.player.on('paused', function(){
