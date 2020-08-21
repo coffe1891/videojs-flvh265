@@ -11,9 +11,6 @@ module.exports = {
 		publicPath: 'dist',
 		filename: 'index.js'
 	},
-	resolve: {
-		modules: [path.resolve('node_modules'), 'node_modules']
-	},
 	plugins: [
 		// new CopyPlugin({
 		// 	patterns: [{

@@ -1,5 +1,6 @@
 import videojs from 'video.js';
-import './plugin.js';
+// import plugin from './plugin.js';
+import plugin from '../dist/videojs-flvh265.es.js';
 
 (() => {
 	let num = 9;
@@ -33,6 +34,7 @@ import './plugin.js';
 		 +`controls `
 		//  +`autoplay `
 		 +`loop `
+		 +`islive `
 		 +`ish265 `
 		 +`hasvideo `
 		 +`hasaudio `
