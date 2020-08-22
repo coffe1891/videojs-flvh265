@@ -1,16 +1,18 @@
 const path = require('path');
 
 module.exports = {
-	mode: "development",
-	// mode: "production",
+	// mode: "development",
+	mode: "production",
 	entry: {
 		main: path.join(__dirname, '../src/plugin.js')
 	},
 	output: {
-		library: 'videojsFlvh265',
-		filename: 'videojs-flvh265.es.js',
+		library: 'Flvh265',
+		filename: 'videojs-flvh265.min.js',
 		libraryTarget: "umd",
 		path: path.join(__dirname, '../dist'),
+		libraryExport: "default",
+		globalObject: 'this',
 	},
 	module: {
 		rules: [{
@@ -20,7 +22,13 @@ module.exports = {
 		}, ],
 	},
 	externals: {
-		"video.js": "videojs",
+		"video.js": {
+			umd: "video.js",
+			amd: "video.js",
+			commonjs: "video.js",
+			commonjs2: "video.js",
+			root: "videojs"
+		},
 		// "wx-inline-player-new":"WXInlinePlayer"
 	},
 	resolve: {
