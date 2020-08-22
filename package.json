@@ -1,5 +1,5 @@
 {
-  "name": "videojs-flvh265",
+  "name": "videojs-flvh2651",
   "version": "1.0.7",
   "description": "Video.js' Tech for FLV+H.265/H.264",
   "author": "coffe1891 <kai.ma@163.com>",
@@ -36,6 +36,7 @@
   ],
   "dependencies": {
     "video.js": "^7",
+    "videojs-flvh265": "^1.0.7",
     "wx-inline-player-new": "^1.0.9"
   },
   "devDependencies": {
