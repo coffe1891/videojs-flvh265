@@ -1,6 +1,6 @@
 {
-  "name": "videojs-flvh265",
-  "version": "1.0.6",
+  "name": "videojs-flvh2651",
+  "version": "1.0.7",
   "description": "Video.js' Tech for FLV+H.265/H.264",
   "author": "coffe1891 <kai.ma@163.com>",
   "license": "GPL",
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/coffe1891/videojs-flvh265.git"
   },
-  "main": "dist/videojs-flvh265.es.js",
+  "main": "dist/videojs-flvh265.js",
   "files": [
     "README.md",
     "dist/",
@@ -17,9 +17,9 @@
   "scripts": {
     "serve": "webpack-dev-server --open --config webpack.config.js",
     "prebuild": "rimraf dist",
-    "build":"npm-run-all -p build:*",
-    "build:script": "webpack --config scripts/build.script.js --progress --colors",
-    "build:es": "webpack --config scripts/build.es.js --progress --colors"
+    "build": "npm-run-all -p build:*",
+    "build:dev": "webpack --config scripts/build.dev.js --progress --colors",
+    "build:pro": "webpack --config scripts/build.pro.js --progress --colors"
   },
   "engines": {
     "node": ">=8",

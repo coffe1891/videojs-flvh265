@@ -1,6 +1,5 @@
 import videojs from 'video.js';
-// import plugin from './plugin.js';
-import plugin from '../dist/videojs-flvh265.es.js';
+import '../dist/videojs-flvh265.js';
 
 (() => {
 	let num = 9;
