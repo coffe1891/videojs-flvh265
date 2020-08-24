@@ -92,6 +92,9 @@ videojs('player', {
 });
 ```
 
+## Reference
+  * [FLV](https://zh.wikipedia.org/wiki/Flash_Video#FLV%E6%96%87%E4%BB%B6%E6%9E%84%E6%88%90)
+
 
 ## License
 
