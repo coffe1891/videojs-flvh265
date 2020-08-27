@@ -31,7 +31,8 @@ const STATE = {
  * @type {JSON}
  */
 const EVENT = {
-  loadstart: "loadSuccess",
+  loadstart: "",
+  loadedmetadata:"loadSuccess",
   play: "play",
   pause: "paused",
   playing: "playing",
@@ -172,48 +173,27 @@ class FlvH265 extends Tech {
     let videoHeight = self.el_.parentElement.offsetHeight;
     let videoWidth = self.el_.parentElement.offsetWidth;
 
-    //set the canvas' height and width
+    // set the canvas' height and width
     self.player.on('mediaInfo', mediaInfo => {
-      self.log()(`mediaInfo`, mediaInfo, videoHeight, videoWidth);
-      const {
-        onMetaData
-      } = mediaInfo;
-      //1.下面这里指定高宽，其实是解码器绘制的真实的高宽
-      $canvas.height = onMetaData.height || videoHeight;
-      $canvas.width = onMetaData.width || videoWidth;
-      for (let i = 0; i < onMetaData.length; i++) {
-        if ('height' in onMetaData[i]) {
-          $canvas.height = onMetaData[i].height;
-        } else if ('width' in onMetaData[i]) {
-          $canvas.width = onMetaData[i].width;
-        }
-      }
-      //2.这里指定高宽，是拉伸canvas以便填满指定高宽的矩形。设成100%以便全屏时自动缩放
       $canvas.style.height = '100%'; //videoHeight + `px`;
       $canvas.style.width = '100%'; //videoWidth + `px`;
     });
 
     //set other events
-
-    /*for (let k in Events) {
-      self.log()(k);
-      this.player.on(Events[k], function(d){
-        self.trigger(k, d)
-      });
-    }*/
-
     self.player.on('loadSuccess',function(){
-      self.trigger('loadstart');
+      self.trigger('loadedmetadata');
     });
 
     self.player.on('play', function(){
-      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
+      self.trigger('loadstart');
+      // show loading at first
+      self.trigger('waiting');
+      // thir first time play
       self.trigger('play');
       self.state = STATE.play;
       self.isEnded = false;
     });
     self.player.on('resumed', function(){
-      // document.querySelector("#"+self.options_.techId).parentElement.querySelector(".vjs-big-play-button").style.display='none';
       self.trigger('play');
       self.state = STATE.play;
     });
@@ -251,8 +231,8 @@ class FlvH265 extends Tech {
       self.isEnded = true;
     });
 
-    self.player.on('loadError',function(){
-      self.trigger('error');
+    self.player.on('loadError',function(e){
+      self.error(e);
     });
 
   }
