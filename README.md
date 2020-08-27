@@ -97,6 +97,7 @@ support these events of Video.js
 ```
 
   loadstart
+  loadedmetadata
   play
   pause
   playing
