@@ -16,24 +16,6 @@ Format↓  | H.264 | H.265 | live stream | local file | seek | comment
 npm install --save videojs-flvh265
 ```
 
-## Custom attributes for `<video>` Tag
-```JavaScript
-ish265    // boolean  : true/false
-          //            true means that video is encoded with h265, false means h264.
-
-islive    // boolean
-
-hasvideo  // boolean
-
-hasaudio  // boolean
-
-lib       // string   : Folder path of libs.
-          //            Default value of lib is "/node_modules/wx-inline-player-new/example/".
-          //            Most of the time, you must set libs folder path,just copy these libs from 
-          //            "/node_modules/wx-inline-player-new/example/" to your final folder,then set
-          //            lib="the final folder path",e.g. lib="https://www.domain.com/libs/"
-```
-
 ## Localhost DEMO
 
 ```sh
@@ -90,6 +72,41 @@ videojs('player', {
     pictureInPictureToggle:false //sorry,we don't support pictureInPicture now
   }
 });
+```
+
+## Custom attributes for `<video>` Tag
+```JavaScript
+ish265    // boolean  : true/false
+          //            true means that video is encoded with h265, false means h264.
+
+islive    // boolean
+
+hasvideo  // boolean
+
+hasaudio  // boolean
+
+lib       // string   : Folder path of libs.
+          //            Default value of lib is "/node_modules/wx-inline-player-new/example/".
+          //            Most of the time, you must set libs folder path,just copy these libs from 
+          //            "/node_modules/wx-inline-player-new/example/" to your final folder,then set
+          //            lib="the final folder path",e.g. lib="https://www.domain.com/libs/"
+```
+
+## Events
+support these events of Video.js
+```
+
+  loadstart
+  loadedmetadata
+  play
+  pause
+  playing
+  waiting
+  ended
+  volumechange
+  durationchange
+  error
+
 ```
 
 ## Reference
